@@ -1,32 +1,145 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app>
+    <v-navigation-drawer v-model="drawer" fixed app>
+      <v-toolbar flat color="transparent">
+        <v-toolbar-title>Account</v-toolbar-title>
+      </v-toolbar>
+      <v-list>
+        <v-list-group
+          v-for="item in items"
+          :key="item.title"
+          v-model="item.active"
+          :prepend-icon="item.icon"
+          no-action
+        >
+          <template v-slot:activator>
+            <v-list-tile>
+              <v-list-tile-content>
+                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </template>
+          <v-list-tile
+            v-for="subItem in item.subItems"
+            :key="subItem.title"
+            :to="subItem.to"
+          >
+            <v-list-tile-content>
+              <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
+            </v-list-tile-content>
+            <v-list-tile-action>
+              <v-icon>{{ subItem.icon }}</v-icon>
+            </v-list-tile-action>
+          </v-list-tile>
+        </v-list-group>
+      </v-list>
+    </v-navigation-drawer>
+    
+    <v-toolbar color="indigo" dark>
+      <v-toolbar-side-icon v-on:click="drawer = !drawer"></v-toolbar-side-icon>
+      <!-- <v-toolbar-title>Title11</v-toolbar-title> -->
+      <!-- <v-toolbar-title>{{ $store.state.title }}</v-toolbar-title> -->
+      <v-toolbar-title>{{ $store.state.user ? $store.state.user.displayName : '아직 로그인 안함' }}</v-toolbar-title>
+      <!-- <v-toolbar-title>{{ $store.state.token }}</v-toolbar-title> -->
+      <v-spacer></v-spacer>
+      <v-btn icon @click="signOut">
+        <!-- <v-icon>mdi-magnify</v-icon> -->
+        <v-icon>mdi-dots-vertical</v-icon>
+      </v-btn>
+    </v-toolbar>
+
+    <v-content>
+      <vue-progress-bar></vue-progress-bar>
+      <v-container grid-list-md>
+        <v-layout row wrap align-center justify-center>
+          <v-card color="transparent" flat v-if="!$isFirebaseAuth">
+            <v-card-text class="text-xs-center">
+              <v-progress-circular
+                indeterminate
+                color="primary"
+              ></v-progress-circular>
+            </v-card-text>
+            <v-card-text class="text-xs-center">
+              인증 상태를 기다리는 중입니다.
+            </v-card-text>
+          </v-card>
+        </v-layout>
+      </v-container>
+      <router-view />
+    </v-content>
+  </v-app>
+
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+  export default {
+    data () {
+      return {
+        drawer: false,
+        items: [
+          {
+            icon: 'mdi-alert',
+            title: "Home",
+            active: true,
+            to: '/',
+            subItems: [
+              {
+                title: 'About',
+                to: '/about',
+                icon: 'mdi-alert',
+              },
+              {
+                title: 'About2',
+                to: '/about2',
+                icon: 'mdi-alert',
+              }
+            ]
+          },
+          {
+            icon: 'mdi-alert-box',
+            title: "Lectures",
+            active: false,
+            to: '/about',
+            subItems: [
+              {
+                title: 'card',
+                to: '/lectures/card',
+                icon: 'mdi-alert-box',
+              },
+              {
+                title: 'layout',
+                to: '/lectures/layout',
+                icon: 'mdi-alert-box',
+              },
+              {
+                title: 'axios',
+                to: '/lectures/axios',
+                icon: 'mdi-alert-box',
+              },
+            ]
+          },
+          {
+            icon: 'mdi-alert-circle',
+            title: "Lectures111",
+            to: '/about2',
+            subItems: [
+              {
+                title: 'dashboard',
+                to: '/',
+                icon: 'mdi-alert-circle',
+              }
+            ]
+          },
+        ],
 
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+      }
+    },
+    methods: {
+      async signOut () {
+        const r = await this.$firebase.auth().signOut()
+        console.log(r);
+        // this.$Progress.start()
+      },
+    }
+  }
+</script>
