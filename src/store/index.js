@@ -7,7 +7,8 @@ export default new Vuex.Store({
   state: {
     title: '원래 제목',
     user: null,
-    token: ''
+    token: '',
+    claims: null
   },
   mutations: {
     setTitle (state, p) {
@@ -19,6 +20,9 @@ export default new Vuex.Store({
     setToken (state, token) {
       state.token = token
     },
+    setClaims (state, claims) {
+      state.claims = claims
+    },
   },
   actions: {
     getUser({commit}, user) {
@@ -26,14 +30,22 @@ export default new Vuex.Store({
       if (!user) return
       console.log("getUser...in2")
 
-      user.getIdToken()
+      return user.getIdToken()
         .then(token => {
+          console.log('getIdToken...in...token...')
+          console.log(token)
           commit('setUser', user)
           commit('setToken', token)
-      })
-      .catch(e => {
-        console.error(e.message)
-      })
+          return user.getIdTokenResult()
+        })
+        .then(r => {
+          console.log('getIdToken...in...r.claims...')
+          console.log(r)
+          commit('setClaims', r.claims)
+        })
+        .catch(e => {
+          console.error(e.message)
+        })
 
     }
   },

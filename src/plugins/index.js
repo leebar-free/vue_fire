@@ -1,5 +1,5 @@
 import './axios'
 import './firebase'
 import './vue-toasted'
-import './vuetify'
+// import './vuetify'
 import './vue-progressbar'

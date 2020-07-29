@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import './plugins'
+import vuetify from './plugins/vuetify'
 // import './plugins/vuetify'
 // import './plugins/firebase'
 // import './plugins/axios'
@@ -19,7 +20,18 @@ Vue.config.productionTip = false
 
 // test.foo()
 
+// const opts = {   
+//   router,
+//   store,
+//   render: h => h(App) }
+// Vue.use(Vuetify);
+
+// new Vue({
+//   vuetify: new Vuetify(opts)
+// }).$mount('#app')
+
 new Vue({
+  vuetify,
   router,
   store,
   render: h => h(App)

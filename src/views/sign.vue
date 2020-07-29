@@ -35,17 +35,14 @@
         <v-layout row wrap align-center justify-center>
             <v-flex xs12 sm5 class="hidden-xs-only">
                 <v-img src="https://cfl.dropboxstatic.com/static/images/empty_states/sign-in-boulder@2x-vfl87XcA-.png"></v-img>
-                
             </v-flex>
             <v-flex xs12 sm5>
-                <sign-in v-if="type"></sign-in>
-                <sign-up v-else></sign-up>
+                <sign-in v-if="type" @changeType="type = !type"></sign-in>
+                <sign-up v-else @changeType="type = !type"></sign-up>
                 
             </v-flex>
-
         </v-layout>
     </v-container>
-
 </template>
 
 <script>
@@ -59,26 +56,26 @@ export default {
     },
     data () {
         return {
-            type: true,
+            type: false,
             email: '',
             password: ''
         }
     },
     methods: {
-        async signInWithGoogle () {
-            const provider = new this.$firebase.auth.GoogleAuthProvider();
-            this.$firebase.auth().languageCode = 'ko';
-            const r = await this.$firebase.auth().signInWithPopup(provider)
-            console.log(r);
-        },
-        async signInEmail () {
-            const r = await this.$firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
-            console.log(r);
-        },
-        async signOut () {
-            const r = await this.$firebase.auth().signOut()
-            console.log(r);
-        },
+        // async signInWithGoogle () {
+        //     const provider = new this.$firebase.auth.GoogleAuthProvider();
+        //     this.$firebase.auth().languageCode = 'ko';
+        //     const r = await this.$firebase.auth().signInWithPopup(provider)
+        //     console.log(r);
+        // },
+        // async signInEmail () {
+        //     const r = await this.$firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
+        //     console.log(r);
+        // },
+        // async signOut () {
+        //     const r = await this.$firebase.auth().signOut()
+        //     console.log(r);
+        // },
     }
 }
 </script>

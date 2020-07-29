@@ -1,6 +1,7 @@
 <template>
   <div >
-    Home Main Page
+    Home Main Page <br>
+    {{ JSON.stringify($store.state.claims, null, 2) }}
   </div>
 </template>
 

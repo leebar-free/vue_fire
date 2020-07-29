@@ -35,18 +35,19 @@ Vue.prototype.$isFirebaseAuth = false
 firebase.auth().onAuthStateChanged(function(user) {
   Vue.prototype.$isFirebaseAuth = true
   // console.log("onAuthStateChanged...in")
-  // console.log(user)
-
-  if (user) {
-    // User is signed in.
-    console.log("onAuthStateChanged...in :: Exists user")
-    router.push('/')
-  } else {
-    // No user is signed in.
-    console.log("onAuthStateChanged...in :: Not Exists user")
-    router.push('/sign')
-  }
+  console.log(user)
 
   // store.commit('setUser', user)
   store.dispatch('getUser', user)
+    .then (() => {
+      if (user) {
+        // User is signed in.
+        console.log("onAuthStateChanged...in :: Exists user")
+        router.push('/')
+      } else {
+        // No user is signed in.
+        console.log("onAuthStateChanged...in :: Not Exists user")
+        router.push('/sign')
+      }
+    })
 });

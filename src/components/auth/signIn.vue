@@ -6,7 +6,7 @@
               <v-spacer></v-spacer>
               <span class="caption">
                   또는&nbsp;
-                <a> 회원가입 </a>
+                <a @click="$emit('changeType')"> 회원가입 </a>
               </span>
           </v-card-title>
           <v-card-actions>
@@ -30,8 +30,19 @@
               </v-layout>              
           </v-container>
           <v-card-text>
-              <v-text-field label="이메일" v-model="email"></v-text-field>
-              <v-text-field label="비밀번호" v-model="password" type="password"></v-text-field>
+              <v-text-field 
+                label="이메일"
+                v-model="form.email"
+                :rules="[rule.required, rule.minLength(7), rule.maxLength(50), rule.email]"
+                required
+              ></v-text-field>
+              <v-text-field 
+                label="비밀번호"
+                v-model="form.password"
+                :rules="[rule.required, rule.minLength(6), rule.maxLength(50)]"
+                type="password"
+                required
+              ></v-text-field>
           </v-card-text>
           <div class="recaptcha-terms-text">
               이 페이지는 reCAPTCHA로 보호되며, Google 개인정보처리방침 및 서비스 약관의 적용을 받습니다.
@@ -39,10 +50,13 @@
 
           <v-card-actions>              
               <v-checkbox
-                :label="`로그인 정보저장`"
+                label="로그인 정보저장"
+                v-model="agree"
+                :rules="[rule.agree]"
+                required
                 ></v-checkbox>
           <v-spacer></v-spacer>
-          <v-btn color="primary" @click="signInEmail">로그인</v-btn>
+          <v-btn color="primary" :disabled="!valid" @click="signInWithEmailAndPassword">로그인</v-btn>
           </v-card-actions>
           
       </v-form>
@@ -53,9 +67,19 @@
 export default {
     data () {
         return {
-            valid: true,
+          form: {
             email: '',
             password: ''
+          },
+          agree: false,
+          rule: {
+            required: v => !!v || '필수 항목입니다.',
+            minLength: length => v => v.length >= length || `${length} 자리 이상으로 입력하세요.`,
+            maxLength: length => v => v.length <= length || `${length} 자리 이하로 입력하세요.`,
+            email: v => /.+@.+/.test(v) || '이메일 형식에 맞지 않습니다.',
+            agree: v => !!v || '약관에 동의해야 진행됩니다.',
+          },
+          valid: true
         }
     },
     methods: {
@@ -63,10 +87,14 @@ export default {
             const provider = new this.$firebase.auth.GoogleAuthProvider();
             this.$firebase.auth().languageCode = 'ko';
             const r = await this.$firebase.auth().signInWithPopup(provider)
+            await this.$firebase.auth().currentUser.getIdTokenResult(true)
             console.log(r);
         },
-        async signInEmail () {
-            const r = await this.$firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
+        async signInWithEmailAndPassword () {
+            // if (this.$refs.form.validate()) return this.$toasted.global.error('입력 폼을 올바르게 작성해주세요.')
+            // alert('ok')
+            // console.log('ok')
+            const r = await this.$firebase.auth().signInWithEmailAndPassword(this.form.email, this.form.password)
             console.log(r);
         },
         // async signOut () {

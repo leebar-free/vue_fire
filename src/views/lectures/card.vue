@@ -20,9 +20,8 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="orange">click</v-btn>
-          <v-btn color="orange" flat>click</v-btn>
+          <v-btn color="green">click</v-btn>
         </v-card-actions>
-
       </v-card>
     </v-flex>
   </v-layout>

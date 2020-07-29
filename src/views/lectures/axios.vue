@@ -18,7 +18,7 @@
                         ></v-textarea>
                     </v-card-text>
                     <v-card-actions>
-                        <v-btn flat color="blue" @click="create">submit</v-btn>
+                        <v-btn text color="blue" @click="create">submit</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-flex>
@@ -33,7 +33,7 @@
                             rows="10"
                         ></v-textarea>                    </v-card-text>
                     <v-card-actions>
-                        <v-btn flat color="blue" @click="read">submit</v-btn>
+                        <v-btn text color="blue" @click="read">submit</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-flex>
@@ -48,7 +48,7 @@
                             rows="10"
                         ></v-textarea>                    </v-card-text>
                     <v-card-actions>
-                        <v-btn flat color="blue" @click="update">submit</v-btn>
+                        <v-btn text color="blue" @click="update">submit</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-flex>
@@ -63,7 +63,7 @@
                             rows="10"
                         ></v-textarea>                    </v-card-text>
                     <v-card-actions>
-                        <v-btn flat color="blue" @click="del">submit</v-btn>
+                        <v-btn text color="blue" @click="del">submit</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-flex>
