@@ -8,7 +8,8 @@ export default new Vuex.Store({
     title: '원래 제목',
     user: null,
     token: '',
-    claims: null
+    claims: null,
+    firebaseLoaded: false
   },
   mutations: {
     setTitle (state, p) {
@@ -23,29 +24,37 @@ export default new Vuex.Store({
     setClaims (state, claims) {
       state.claims = claims
     },
+    setFirebaseLoaded (state) {
+      state.firebaseLoaded = true
+    },
   },
   actions: {
-    getUser({commit}, user) {
+    async getUser({commit}, user) {
       console.log("getUser...in")
-      if (!user) return
+      commit('setFirebaseLoaded')
+      commit('setUser', user)
+      if (!user) return false
       console.log("getUser...in2")
 
-      return user.getIdToken()
-        .then(token => {
-          console.log('getIdToken...in...token...')
-          console.log(token)
-          commit('setUser', user)
-          commit('setToken', token)
-          return user.getIdTokenResult()
-        })
-        .then(r => {
-          console.log('getIdToken...in...r.claims...')
-          console.log(r)
-          commit('setClaims', r.claims)
-        })
-        .catch(e => {
-          console.error(e.message)
-        })
+      const token = await user.getIdToken()
+      commit('setToken', token)
+      const { claims } = await user.getIdTokenResult()
+      commit('setClaims', claims)
+
+      // user.getIdToken()
+      //   .then(token => {
+      //     console.log('getIdToken...in...token...')
+      //     console.log(token)
+      //     return user.getIdTokenResult()
+      //   })
+      //   .then(r => {
+      //     console.log('getIdToken...in...r.claims...')
+      //     console.log(r)
+      //     commit('setClaims', r.claims)
+      //   })
+      //   .catch(e => {
+      //     console.error(e.message)
+      //   })
 
     }
   },

@@ -1,18 +1,22 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '../store';
 import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
+
+const levelCheck = (to, from, next) => {
+  console.log('levelCheck...in :: ', store.state.claims.level)
+  if (store.state.claims.level === undefined) next('/userProfile')
+  next()    
+}
 
 const routes = [
   {
     path: '/',
     name: 'Home',
     component: Home,
-    beforeEnter: (to, from, next) => {
-      console.log('beforeEnter...in')
-      next()    
-    }
+    beforeEnter: levelCheck
   },
   {
     path: '/about',
@@ -25,7 +29,12 @@ const routes = [
   {
     path: '/about2',
     name: 'About2',
-    component: () => import(/* webpackChunkName: "about" */ '../views/About2.vue')
+    component: () => import('../views/About2.vue')
+  },
+  {
+    path: '/userProfile',
+    name: 'userProfile',
+    component: () => import('../views/userProfile.vue')
   },
   {
     path: '/lectures/card',
@@ -74,9 +83,11 @@ router.beforeEach((to, from, next) => {
   console.log('router.beforeEach...in')
   // this.$Progress.start()
   Vue.prototype.$Progress.start()
-  setTimeout(() => {
-    if ( Vue.prototype.$isFirebaseAuth ) next()
-  }, 2000);
+  if ( store.state.firebaseLoaded ) next()
+  // setTimeout(() => {
+  //   // if ( Vue.prototype.$isFirebaseAuth ) next()
+  //   if ( store.state.firebaseLoaded ) next()
+  // }, 2000);
 })
 
 router.afterEach((to, from) => {
