@@ -39,21 +39,13 @@ firebase.auth().onAuthStateChanged(function(user) {
 
   // store.commit('setUser', user)
   store.dispatch('getUser', user)
-    .then (() => {
-      if (user) {
-        // User is signed in.
-        console.log("onAuthStateChanged...in :: Exists user")
-        router.push('/')
-        .catch(e => {
-          console.error(e.message)
-        })
-      } else {
-        // No user is signed in.
-        console.log("onAuthStateChanged...in :: Not Exists user")
-        router.push('/sign')
-        .catch(e => {
-          console.error(e.message)
-        })
-      }
-    })
+    // .then (() => {
+    //   if (user) {
+    //     console.log("onAuthStateChanged...in :: Exists user")
+    //     router.push('/')
+    //   } else {
+    //     console.log("onAuthStateChanged...in :: Not Exists user")
+    //     router.push('/sign')
+    //   }
+    // })
 });

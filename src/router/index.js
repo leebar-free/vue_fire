@@ -79,15 +79,31 @@ const router = new VueRouter({
   routes
 })
 
+const waitFirebase = () => {
+	return new Promise((resolve, reject) => {
+		let cnt = 0
+		const tmr = setInterval(() => {
+			if (store.state.firebaseLoaded) {
+				clearInterval(tmr)
+				resolve()
+			} else if (cnt++ > 200) {
+				clearInterval(tmr)
+				reject(Error('파이어베이스 로드가 안되었습니다.'))
+			}
+		}, 10);
+	})
+}
+
 router.beforeEach((to, from, next) => {
   console.log('router.beforeEach...in')
   // this.$Progress.start()
   Vue.prototype.$Progress.start()
-  if ( store.state.firebaseLoaded ) next()
-  // setTimeout(() => {
-  //   // if ( Vue.prototype.$isFirebaseAuth ) next()
-  //   if ( store.state.firebaseLoaded ) next()
-  // }, 2000);
+  // if ( store.state.firebaseLoaded ) {
+  //   next()
+  // }
+  waitFirebase()
+  .then(() => next())
+  .catch(e => Vue.prototype.$toasted.global.error(e.message))
 })
 
 router.afterEach((to, from) => {
