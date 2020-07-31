@@ -25,7 +25,7 @@ const adminCheck = (to, from, next) => {
 }
 
 const userCheck = (to, from, next) => {
-  console.log('adminCheck...in...user :: ', store.state.user)
+  console.log('userCheck...in...user :: ', store.state.user)
   if (!store.state.user) {
     if (to.path !== '/sign') return next('/sign')
   } else {
@@ -36,11 +36,11 @@ const userCheck = (to, from, next) => {
 }
 
 const guestCheck = (to, from, next) => {
-  console.log('adminCheck...in...user :: ', store.state.user)
+  console.log('guestCheck...in...user :: ', store.state.user)
   if (!store.state.user) {
     if (to.path !== '/sign') return next('/sign')
   } else {
-    if (!store.state.user.emailVerified) return next('/userProfile')
+    // if (!store.state.user.emailVerified) return next('/userProfile')
     if (store.state.claims.level > 2) throw Error('손님만 들어갈 수 있습니다.')
   }
   next()
@@ -70,6 +70,11 @@ const routes = [
       if (!store.state.user) return next('/sign')
       next()
     }
+  },
+  {
+    path: '/admin/users',
+    component: () => import('../views/admin/users.vue'),
+    beforeEnter: guestCheck   //adminCheck, guestCheck
   },
   {
     path: '/test/lv0',

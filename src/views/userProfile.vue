@@ -2,7 +2,12 @@
     <div>
         <p> userProfile Page </p>
         <!-- {{ $store.state.claims.level }} -->
+        <v-spacer></v-spacer>
+        <p> :: state.user :: </p>
         {{ JSON.stringify($store.state.user, null, 2) }}
+        <v-spacer></v-spacer>
+
+        <p> :: state.claims :: </p>
         {{ JSON.stringify($store.state.claims, null, 2) }}
         <v-spacer></v-spacer>
         <v-btn color="success" @click="tokenUpdate">tokenUpdate</v-btn>

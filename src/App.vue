@@ -203,6 +203,19 @@
             ]
           },
           {
+            icon: 'mdi-alert-box',
+            title: "Admin",
+            active: false,
+            to: '/admin/users',
+            subItems: [
+              {
+                title: 'users',
+                to: '/admin/users',
+                icon: 'mdi-alert-box',
+              },
+            ]
+          },
+          {
             icon: 'mdi-alert-circle',
             title: "test",
             to: '/about2',
