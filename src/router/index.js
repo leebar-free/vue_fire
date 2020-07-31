@@ -5,10 +5,45 @@ import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
 
-const levelCheck = (to, from, next) => {
-  console.log('levelCheck...in :: ', store.state.claims.level)
-  if (store.state.claims.level === undefined) next('/userProfile')
-  next()    
+// const levelCheck = (to, from, next) => {
+//   console.log('levelCheck...in...user :: ', store.state.user)
+//   console.log('levelCheck...in...claims :: ', store.state.claims)
+//   if (!store.state.user) return next('/sign')
+//   if (!store.state.claims) return next('/userProfile')
+//   next()
+// }
+
+const adminCheck = (to, from, next) => {
+  console.log('adminCheck...in...user :: ', store.state.user)
+  if (!store.state.user) {
+    if (to.path !== '/sign') return next('/sign')
+  } else {
+    if (!store.state.user.emailVerified) return next('/userProfile')
+    if (store.state.claims.level > 0) throw Error('관리자만 들어갈 수 있습니다.')
+  }
+  next()
+}
+
+const userCheck = (to, from, next) => {
+  console.log('adminCheck...in...user :: ', store.state.user)
+  if (!store.state.user) {
+    if (to.path !== '/sign') return next('/sign')
+  } else {
+    if (!store.state.user.emailVerified) return next('/userProfile')
+    if (store.state.claims.level > 1) throw Error('사용자만 들어갈 수 있습니다.')
+  }
+  next()
+}
+
+const guestCheck = (to, from, next) => {
+  console.log('adminCheck...in...user :: ', store.state.user)
+  if (!store.state.user) {
+    if (to.path !== '/sign') return next('/sign')
+  } else {
+    if (!store.state.user.emailVerified) return next('/userProfile')
+    if (store.state.claims.level > 2) throw Error('손님만 들어갈 수 있습니다.')
+  }
+  next()
 }
 
 const routes = [
@@ -16,7 +51,40 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
-    beforeEnter: levelCheck
+    beforeEnter: guestCheck
+  },
+  {
+    path: '/sign',
+    name: 'sign',
+    component: () => import('../views/sign.vue'),
+    beforeEnter: (to, from, next) => {
+      if (store.state.user) return next('/')
+      next()
+    }
+  },
+  {
+    path: '/userProfile',
+    name: 'userProfile',
+    component: () => import('../views/userProfile.vue'),
+    beforeEnter: (to, from, next) => {
+      if (!store.state.user) return next('/sign')
+      next()
+    }
+  },
+  {
+    path: '/test/lv0',
+    component: () => import('../views/test/lv0.vue'),
+    beforeEnter: adminCheck
+  },
+  {
+    path: '/test/lv1',
+    component: () => import('../views/test/lv1.vue'),
+    beforeEnter: userCheck
+  },
+  {
+    path: '/test/lv2',
+    component: () => import('../views/test/lv2.vue'),
+    beforeEnter: guestCheck
   },
   {
     path: '/about',
@@ -30,11 +98,6 @@ const routes = [
     path: '/about2',
     name: 'About2',
     component: () => import('../views/About2.vue')
-  },
-  {
-    path: '/userProfile',
-    name: 'userProfile',
-    component: () => import('../views/userProfile.vue')
   },
   {
     path: '/lectures/card',
@@ -52,11 +115,6 @@ const routes = [
     component: () => import('../views/lectures/notes.vue')
   },
   {
-    path: '/sign',
-    name: 'sign',
-    component: () => import('../views/sign.vue')
-  },
-  {
     path: '/lectures/axios',
     name: 'axios',
     component: () => import('../views/lectures/axios.vue')
@@ -71,6 +129,21 @@ const routes = [
     name: 'vuex',
     component: () => import('../views/lectures/vuex.vue')
   },
+  // {
+  //   path: '/test/lv0',
+  //   name: 'lv0',
+  //   component: () => import('../views/test/lv0.vue')
+  // },
+  // {
+  //   path: '/test/lv1',
+  //   name: 'lv1',
+  //   component: () => import('../views/test/lv1.vue')
+  // },
+  // {
+  //   path: '/test/lv2',
+  //   name: 'lv2',
+  //   component: () => import('../views/test/lv2.vue')
+  // },
 ]
 
 const router = new VueRouter({
@@ -102,14 +175,19 @@ router.beforeEach((to, from, next) => {
   //   next()
   // }
   waitFirebase()
-  .then(() => next())
-  .catch(e => Vue.prototype.$toasted.global.error(e.message))
+    .then(() => next())
+    .catch(e => Vue.prototype.$toasted.global.error(e.message))
 })
 
 router.afterEach((to, from) => {
   console.log('router.afterEach...in')
   Vue.prototype.$Progress.finish()
   // next()
+})
+
+router.onError(e => {
+  Vue.prototype.$Progress.finish()
+  Vue.prototype.$toasted.global.error(e.message)
 })
 
 export default router

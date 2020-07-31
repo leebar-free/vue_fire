@@ -204,14 +204,24 @@
           },
           {
             icon: 'mdi-alert-circle',
-            title: "Lectures111",
+            title: "test",
             to: '/about2',
             subItems: [
               {
-                title: 'dashboard',
-                to: '/',
+                title: 'lv0',
+                to: '/test/lv0',
                 icon: 'mdi-alert-circle',
-              }
+              },
+              {
+                title: 'lv1',
+                to: '/test/lv1',
+                icon: 'mdi-alert-circle',
+              },
+              {
+                title: 'lv2',
+                to: '/test/lv2',
+                icon: 'mdi-alert-circle',
+              },
             ]
           },
         ],
@@ -221,7 +231,8 @@
     methods: {
       async signOut () {
         const r = await this.$firebase.auth().signOut()
-        console.log(r);
+        // console.log(r);
+        this.$router.push('/sign')
         // this.$Progress.start()
       },
     }

@@ -105,7 +105,9 @@ export default {
           const provider = new this.$firebase.auth.GoogleAuthProvider();
           this.$firebase.auth().languageCode = 'ko';
           const r = await this.$firebase.auth().signInWithPopup(provider)
-          console.log(r);
+          // console.log(r);
+          await this.$firebase.auth().signOut()
+          this.$emit('changeType')
         },
         async createUserWithEmailAndPassword () {
           // if (this.$refs.form.validate()) return this.$toasted.global.error('입력 폼을 올바르게 작성해주세요.')
@@ -119,6 +121,8 @@ export default {
             displayName: `${this.form.lastName} ${this.form.firstName}`
           })
           console.log(result)
+          await this.$firebase.auth().signOut()
+          this.$emit('changeType')
         },
     }
 

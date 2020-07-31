@@ -88,6 +88,11 @@ export default {
             this.$firebase.auth().languageCode = 'ko';
             const r = await this.$firebase.auth().signInWithPopup(provider)
             console.log(r);
+            const user = this.$firebase.auth().currentUser
+            await user.getIdToken()
+            await this.$store.dispatch('getUser', user)
+            if (this.$store.state.claims === undefined) this.$router.push('/userProfile')
+            this.$router.push('/')
         },
         async signInWithEmailAndPassword () {
             // if (this.$refs.form.validate()) return this.$toasted.global.error('입력 폼을 올바르게 작성해주세요.')
@@ -95,6 +100,11 @@ export default {
             // console.log('ok')
             const r = await this.$firebase.auth().signInWithEmailAndPassword(this.form.email, this.form.password)
             console.log(r);
+            const user = this.$firebase.auth().currentUser
+            await user.getIdToken()
+            await this.$store.dispatch('getUser', user)
+            if (this.$store.state.claims === undefined) this.$router.push('/userProfile')
+            this.$router.push('/')
         },
         // async signOut () {
         //     const r = await this.$firebase.auth().signOut()
