@@ -4,7 +4,10 @@ const admin = require('firebase-admin');
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions
 
-admin.initializeApp()
+// admin.initializeApp()
+admin.initializeApp({ 
+    credential: admin.credential.cert(require('./key.json')) 
+})
 
 const db = admin.firestore()
 
@@ -36,3 +39,24 @@ exports.deleteUser = functions.auth.user().onDelete( (user) => {
     // console.log("functions.auth.user().onCreate...in")
     db.collection('users').doc(user.uid).delete()
 })
+
+exports.incrementUserCount = functions.firestore
+    .document('users/{userId}')
+    .onCreate((snap, context) => {
+        return db.collection('infos').doc('users').update(
+            'counter', admin.firestore.FieldValue.increment(1)
+        )
+    })
+
+exports.decrementUserCount = functions.firestore
+    .document('users/{userId}')
+    .onDelete((snap, context) => {
+        return db.collection('infos').doc('users').update(
+            'counter', admin.firestore.FieldValue.increment(-1)
+        )
+    })
+
+db.collection('infos').doc('users').get()
+    .then(s => {
+        if (!s.exists) db.collection('infos').doc('users').set({ counter: 0 })
+    })
