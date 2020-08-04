@@ -51,7 +51,7 @@ app.get('/users', async (req, res) => {
 })
 
 app.get('/search', async (req, res) => {
-    const r = await db.collection('users').limit(10).get()
+    const r = await db.collection('users').where('email', '>=', req.query.search).limit(3).get()
 
     const items = []
     r.forEach(v => {
