@@ -12,7 +12,7 @@ app.use(require('../middlewares/verifyToken'))
 
 app.get('/users', async (req, res) => {
     if (req.claims.level > 0) return res.send(403).send({ message: 'not authorized' })
-    const { offset, limit } = req.query
+    const { offset, limit, order, sort } = req.query
     console.log( req.query )
     offset1 = Number(offset)
     limit1 = Number(limit)
@@ -29,7 +29,8 @@ app.get('/users', async (req, res) => {
     // console.log("totalCount :", r.totalCount)
 
     // const s = await db.collection('users').get()
-    const s = await db.collection('users').offset(offset1).limit(limit1).get()
+    // const s = await db.collection('users').offset(offset1).limit(limit1).get()
+    const s = await db.collection('users').orderBy(order, sort).offset(offset1).limit(limit1).get()
     s.forEach(v => r.items.push(v.data()))
     res.send(r)
 })

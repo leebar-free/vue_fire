@@ -11,6 +11,7 @@
                 :server-items-length="totalCount"
                 :items-per-page="5"
                 :loading="loading"
+                must-sort
                 class="elevation-1"
             ></v-data-table>
         </v-card-text>
@@ -25,7 +26,10 @@ export default {
     data () {
         return {
             headers: [
-            { text: 'UID', value: 'uid',},
+            { 
+                text: 'UID', 
+                value: 'uid',
+            },
             { text: 'email', value: 'email' },
             { text: 'Name', value: 'displayName' },
             { text: 'photoURL', value: 'photoURL' },
@@ -33,7 +37,10 @@ export default {
             items: [],
             totalCount: 0,
             loading: false,
-            options: {},
+            options: {
+                sortBy: ['email'],
+                sortDesc: [false]
+            },
         }
     },
     watch: {
@@ -46,17 +53,21 @@ export default {
     },
     methods: {
         async list () {
+            this.loading = true
             // console.log('list...in...page :', this.options.page)
-            const { data } = await this.$axios.get('/admin/users', {
+            const r = await this.$axios.get('/admin/users', {
                 params: {
                     offset: this.options.page > 0 ? (this.options.page -1) * this.options.itemsPerPage : 0,
-                    limit: this.options.itemsPerPage
+                    limit: this.options.itemsPerPage,
+                    order: this.options.sortBy[0],
+                    sort: this.options.sortDesc[0] ? 'desc' : 'asc',
                 }
             })
-            // console.log( this.options )
             // console.log( data )
-            this.totalCount = data.totalCount
-            this.items = data.items
+            this.totalCount = r.data.totalCount
+            this.items = r.data.items
+            this.loading = false
+            console.log( this.options )
         }
     },
 
