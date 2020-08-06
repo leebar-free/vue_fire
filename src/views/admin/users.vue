@@ -1,50 +1,110 @@
 <template>
-    <v-card>
-        <!-- <v-card-title primary-title>
-            <v-combobox
-                v-model="search"
-                :items="emails"
-                label="이메일을 입력하세요."
-                :loading="loadingSearch"
-                @update:search-input="searchEmails"
-            ></v-combobox>
-        </v-card-title> -->
-        <v-toolbar
-            dark
-            color="teal"
-        >
-            <v-toolbar-title>회원관리</v-toolbar-title>
-            <v-autocomplete
-                v-model="email"
-                :loading="loadingSearch"
-                :items="emails"
-                :search-input.sync="search"
-                cache-items
-                class="mx-4"
-                flat
-                hide-no-data
-                hide-details
-                label="이메일을 입력하세요."
-                solo-inverted
-                clearable
-            ></v-autocomplete>
-        </v-toolbar>
-        <v-card-text>
-            <v-data-table
-                :headers="headers"
-                :items="items"
-                :options.sync="options"
-                :server-items-length="totalCount"
-                :items-per-page="5"
-                :loading="loading"
-                must-sort
-                class="elevation-1"                
-            ></v-data-table>
-        </v-card-text>
-        <v-card-actions>
-            <v-btn color="success" @click="list">get list</v-btn>
-        </v-card-actions>
-    </v-card>  
+    <v-container grid-list-md fluid>
+        <v-card>
+            <v-toolbar
+                dark
+                color="teal"
+            >
+                <v-toolbar-title>회원관리</v-toolbar-title>
+                <v-autocomplete
+                    v-model="email"
+                    :loading="loadingSearch"
+                    :items="emails"
+                    :search-input.sync="search"
+                    cache-items
+                    class="mx-4"
+                    flat
+                    hide-no-data
+                    hide-details
+                    label="이메일을 입력하세요."
+                    solo-inverted
+                    clearable
+                ></v-autocomplete>
+            </v-toolbar>
+            <v-card-text>
+                <!-- <v-data-table
+                    :headers="headers"
+                    :items="items"
+                    :options.sync="options"
+                    :server-items-length="totalCount"
+                    :items-per-page="5"
+                    :loading="loading"
+                    must-sort
+                    class="elevation-1"
+                ></v-data-table> -->
+
+                <v-data-iterator
+                    :items="items"
+                    :options.sync="options"
+                    :server-items-length="totalCount"
+                    :items-per-page="4"
+                    :loading="loading"
+                >
+
+                <template v-slot:default="props">
+                    <!-- <v-row> -->
+                    <v-layout row wrap>
+                        <v-flex xs12 v-if="loading" class="text-center">
+                            <v-progress-circular
+                                indeterminate
+                                color="primary"
+                            ></v-progress-circular>
+                            <p>잠시만 기다려 주세요.</p>
+                        </v-flex>
+                        <v-flex
+                            v-else
+                            v-for="item in props.items"
+                            :key="item.email"
+                            xs="12"
+                            sm="6"
+                            md="4"
+                            lg="3"
+                        >
+                            <!-- <v-card>
+                            <v-card-title class="subheading font-weight-bold">{{ item.email }}</v-card-title>
+                            <v-divider></v-divider>
+                            <v-list dense>
+                                <v-list-item>
+                                <v-list-item-content>DisplayName:</v-list-item-content>
+                                <v-list-item-content class="align-end">{{ item.displayName }}</v-list-item-content>
+                                </v-list-item>
+                            </v-list>
+                            </v-card> -->
+                            <v-card
+                            >
+                                <div class="d-flex flex-no-wrap justify-space-between">
+                                    <v-avatar
+                                        class="ma-2"
+                                        size="125"
+                                        tile
+                                    >
+                                        <v-img :src="item.photoURL | imageCheck"></v-img>
+                                    </v-avatar>
+
+                                    <div>
+                                        <v-card-title
+                                        class="headline mb-2"
+                                        v-text="item.email"
+                                        ></v-card-title>
+
+                                        <v-card-subtitle >{{ item.displayName | nameCheck }}</v-card-subtitle>
+                                    </div>
+                                </div>
+                            </v-card>
+
+                        </v-flex>
+                    </v-layout>
+                    <!-- </v-row> -->
+                </template>
+
+                </v-data-iterator>
+
+            </v-card-text>
+            <!-- <v-card-actions>
+                <v-btn color="success" @click="list">get list</v-btn>
+            </v-card-actions> -->
+        </v-card>  
+    </v-container>
 </template>
 
 <script>
@@ -85,6 +145,19 @@ export default {
       search (val) {
         val && val !== this.select && this.searchEmails(val)
       },
+      email (n, o) {
+          if (n !== o) this.list()
+      },
+    },
+    filters: {
+        nameCheck (v) {
+            if (v) return v
+            return '이름 없음'
+        },
+        imageCheck (v) {
+            if (v) return v
+            return 'https://cdn.vuetifyjs.com/images/cards/halcyon.png'
+        },
     },
     methods: {
         async list () {
@@ -96,7 +169,7 @@ export default {
                     limit: this.options.itemsPerPage,
                     order: this.options.sortBy[0],
                     sort: this.options.sortDesc[0] ? 'desc' : 'asc',
-                    search: this.search,
+                    search: this.email,
                 }
             })
             // console.log( data )
@@ -121,7 +194,7 @@ export default {
                 })
                 .then(({ data }) => {
                     this.emails = data
-                    console.log(this.emails)
+                    // console.log(this.emails)
                 })
                 .catch(e => {
                     this.$toasted.global.error(e.message)
