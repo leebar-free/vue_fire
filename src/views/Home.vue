@@ -3,6 +3,8 @@
     Home Main Page 
     <v-spacer></v-spacer>
     {{ JSON.stringify($store.state.claims, null, 2) }}
+    <v-spacer></v-spacer>
+    {{ JSON.stringify($store.state.user, null, 2) }}
   </div>
 </template>
 

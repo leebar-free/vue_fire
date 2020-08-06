@@ -20,6 +20,9 @@
                     solo-inverted
                     clearable
                 ></v-autocomplete>
+                <v-btn icon @click="list" :disabled="loading">
+                    <v-icon>mdi-refresh</v-icon>
+                </v-btn>
             </v-toolbar>
             <v-card-text>
                 <!-- <v-data-table
@@ -55,10 +58,10 @@
                             v-else
                             v-for="item in props.items"
                             :key="item.email"
-                            xs="12"
-                            sm="6"
-                            md="4"
-                            lg="3"
+                            xs12
+                            sm6
+                            md4
+                            lg3
                         >
                             <!-- <v-card>
                             <v-card-title class="subheading font-weight-bold">{{ item.email }}</v-card-title>
@@ -70,7 +73,9 @@
                                 </v-list-item>
                             </v-list>
                             </v-card> -->
-                            <v-card
+
+                            <!-- <v-card
+                                :loading="loadingCard"
                             >
                                 <div class="d-flex flex-no-wrap justify-space-between">
                                     <v-avatar
@@ -88,9 +93,24 @@
                                         ></v-card-title>
 
                                         <v-card-subtitle >{{ item.displayName | nameCheck }}</v-card-subtitle>
+                                        <v-card-subtitle>
+                                            <v-select
+                                                class="ma-2"
+                                                v-model="item.level"
+                                                :items="levels"
+                                                label="Solo field"
+                                                solo
+                                                hide-details
+                                                @change="levelChange(item)"
+                                            ></v-select>
+
+                                        </v-card-subtitle>
+                                        
                                     </div>
                                 </div>
-                            </v-card>
+                            </v-card> -->
+
+                            <user-card :item="item"></user-card>
 
                         </v-flex>
                     </v-layout>
@@ -109,18 +129,23 @@
 
 <script>
 import _ from 'lodash'
+import UserCard from '@/components/userCard.vue'
 
 export default {
+    components: {
+        UserCard
+    },
     data () {
         return {
             headers: [
-            { 
-                text: 'UID', 
-                value: 'uid',
-            },
-            { text: 'email', value: 'email' },
-            { text: 'Name', value: 'displayName' },
-            { text: 'photoURL', value: 'photoURL' },
+                { 
+                    text: 'UID', 
+                    value: 'uid',
+                },
+                { text: 'email', value: 'email' },
+                { text: 'Name', value: 'displayName' },
+                { text: 'photoURL', value: 'photoURL' },
+                { text: 'level', value: 'level' },
             ],
             items: [],
             totalCount: 0,
@@ -132,7 +157,7 @@ export default {
             search: '',
             emails: [],
             email: null,
-            loadingSearch: false
+            loadingSearch: false,
         }
     },
     watch: {
@@ -149,16 +174,6 @@ export default {
           if (n !== o) this.list()
       },
     },
-    filters: {
-        nameCheck (v) {
-            if (v) return v
-            return '이름 없음'
-        },
-        imageCheck (v) {
-            if (v) return v
-            return 'https://cdn.vuetifyjs.com/images/cards/halcyon.png'
-        },
-    },
     methods: {
         async list () {
             this.loading = true
@@ -172,7 +187,7 @@ export default {
                     search: this.email,
                 }
             })
-            // console.log( data )
+            console.log( r.data )
             this.totalCount = r.data.totalCount
             this.items = r.data.items
             this.loading = false

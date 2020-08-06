@@ -60,6 +60,22 @@ app.get('/search', async (req, res) => {
     res.send(items)
 })
 
+app.patch('/user/:uid/level', async (req, res) => {
+    if (!req.params.uid) return res.send(400).end()
+    if (req.body.level === undefined) return res.send(400).end()
+
+    const uid = req.params.uid
+    const level = req.body.level
+
+    console.log("app.patch1 :", uid)
+    console.log("app.patch2 :", level)
+
+    const claims = { level: level }
+    await admin.auth().setCustomUserClaims(uid, claims)
+    await db.collection('users').doc(uid).update(claims)
+    res.send(200).end()
+})
+
 app.use(require('../middlewares/error'))
 
 module.exports = app

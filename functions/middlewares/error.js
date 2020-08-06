@@ -4,5 +4,5 @@ module.exports = (err, req, res, next) => {
         res.json({ error: err.message });
     }
 
-    res.send(err.message)
+    res.status(500).send(err.message)
 }
