@@ -139,6 +139,11 @@ const routes = [
     name: 'storage',
     component: () => import('../views/lectures/storage.vue')
   },
+  {
+    path: '/lectures/grid',
+    name: 'grid',
+    component: () => import('../views/lectures/grid.vue')
+  },
   // {
   //   path: '/test/lv0',
   //   name: 'lv0',
