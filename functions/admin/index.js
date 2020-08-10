@@ -11,6 +11,7 @@ app.use(cors({ origin: true }))
 app.use(require('../middlewares/verifyToken'))
 
 app.use( (req, res, next) => {
+    if (req.claims.level === undefined) return res.send(403).send({ message: 'not authorized' })
     if (req.claims.level > 0) return res.send(403).send({ message: 'not authorized' })
     next()
 })

@@ -3,11 +3,12 @@ import Vue from 'vue'
 import * as firebase from "firebase/app";
 import firebaseConfig from '../../firebaseConfig';
 import store from '../store';
-import router from '../router'
+// import router from '../router'
 
 // Add the Firebase products that you want to use
 import "firebase/auth";
 import "firebase/firestore";
+import "firebase/firebase-storage";
 
 // TODO: Replace the following with your app's Firebase project configuration
 // const firebaseConfig = {
