@@ -1,12 +1,14 @@
 import Vue from 'vue'
 import axios from "axios";
 import store from '../store';
+import firebaseConfig from '../../firebaseConfig';
 
 const firebaseAPI = axios.create({
-    baseURL: process.env.NODE_ENV === 'production' ? 'https://us-central1-vue-fire-99d24.cloudfunctions.net/' : 'http://localhost:5001/vue-fire-99d24/us-central1/',
+    baseURL: process.env.NODE_ENV === 'production' ? `https://us-central1-${firebaseConfig.projectId}-99d24.cloudfunctions.net/` : `http://localhost:5001/${firebaseConfig.projectId}/us-central1/`,
+    // baseURL: process.env.NODE_ENV === 'production' ? 'https://us-central1-vue-fire-99d24.cloudfunctions.net/' : 'http://localhost:5001/vue-fire-99d24/us-central1/',
     // baseURL: 'https://us-central1-vue-fire-99d24.cloudfunctions.net/',
     timeout: 10000,
-    headers: {'X-Custom-Header': 'foobar'}
+    // headers: {'X-Custom-Header': 'foobar'}
 });
 
 // Add a request interceptor

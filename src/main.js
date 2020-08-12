@@ -1,3 +1,4 @@
+import 'babel-polyfill'
 import Vue from 'vue'
 import './plugins'
 import vuetify from './plugins/vuetify'

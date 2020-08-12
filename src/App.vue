@@ -76,7 +76,7 @@
     
     <v-app-bar color="indigo" dark app>
       <v-app-bar-nav-icon v-on:click="drawer = !drawer" v-if="$store.state.user"></v-app-bar-nav-icon>
-      <v-toolbar-title>미정 0.0.1</v-toolbar-title>
+      <v-toolbar-title>미정 0.0.1 [ {{ env }} ]</v-toolbar-title>
       <!-- <v-toolbar-title>{{ $store.state.title }}</v-toolbar-title> -->
       <!-- <v-toolbar-title>{{ $store.state.user ? $store.state.user.displayName : '아직 로그인 안함' }}</v-toolbar-title> -->
       <!-- <v-toolbar-title>{{ $store.state.token }}</v-toolbar-title> -->
@@ -159,6 +159,7 @@
   export default {
     data () {
       return {
+        env: process.env.NODE_ENV,
         drawer: false,
         items: [
           {
