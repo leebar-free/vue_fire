@@ -169,6 +169,11 @@
             to: '/',
             subItems: [
               {
+                title: 'Dashboard',
+                to: '/',
+                icon: 'mdi-alert',
+              },
+              {
                 title: 'About',
                 to: '/about',
                 icon: 'mdi-alert',

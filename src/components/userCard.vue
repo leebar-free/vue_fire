@@ -50,7 +50,7 @@ export default {
     filters: {
         nameCheck (v) {
             if (v) return v
-            return '이름 없음'
+            return 'no name'
         },
         imageCheck (v) {
             if (v) return v
