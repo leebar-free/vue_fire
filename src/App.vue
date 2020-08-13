@@ -1,52 +1,14 @@
 <template>
   <v-app>
     <v-navigation-drawer v-model="drawer" fixed app>
-      <!-- <v-toolbar flat color="transparent">
-        <v-toolbar-title>Account</v-toolbar-title>
-      </v-toolbar>
-      <v-list>
-        <v-list-group
-          v-for="item in items"
-          :key="item.title"
-          v-model="item.active"
-          :prepend-icon="item.icon"
-          no-action
-        >
-          <template v-slot:activator>
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </template>
-          <v-list-tile
-            v-for="subItem in item.subItems"
-            :key="subItem.title"
-            :to="subItem.to"
-          >
-            <v-list-tile-content>
-              <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
-            </v-list-tile-content>
-            <v-list-tile-action>
-              <v-icon>{{ subItem.icon }}</v-icon>
-            </v-list-tile-action>
-          </v-list-tile>
-        </v-list-group>
-      </v-list> -->
-
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="title">
             Account
           </v-list-item-title>
-          <!-- <v-list-item-subtitle>
-            subtext
-          </v-list-item-subtitle> -->
         </v-list-item-content>
       </v-list-item>
-
       <v-divider></v-divider>
-
       <v-list nav>
         <v-list-group
           v-for="item in items"
@@ -60,7 +22,6 @@
               <v-list-item-title v-text="item.title"></v-list-item-title>
             </v-list-item-content>
           </template>
-
           <v-list-item
             v-for="subItem in item.subItems"
             :key="subItem.title"
@@ -72,8 +33,7 @@
           </v-list-item>
         </v-list-group>
       </v-list>
-    </v-navigation-drawer>
-    
+    </v-navigation-drawer>    
     <v-app-bar color="indigo" dark app>
       <v-app-bar-nav-icon v-on:click="drawer = !drawer" v-if="$store.state.user"></v-app-bar-nav-icon>
       <v-toolbar-title>미정 0.0.1 [ {{ env }} ]</v-toolbar-title>
@@ -107,7 +67,6 @@
                   >
                     <img v-if="$store.state.user.photoURL" :src="$store.state.user.photoURL" alt="avatar">
                     <v-icon v-else> mdi-account</v-icon>
-                    <!-- <img src="https://lh4.googleusercontent.com/-Fx791vz8bTg/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuckwU2Y7e7QUlk0KYUXNbOqZ-bf27Q/photo.jpg" alt="avatar"> -->
                   </v-avatar>
                 </v-flex>
                 <v-flex xs8>
@@ -115,22 +74,17 @@
                     <span class="font-weight-bold"> {{ $store.state.user.displayName }} </span>
                     <br>
                     <span class="font-weight-thin"> {{ $store.state.user.email }} </span>
-                  </v-card-text>
-                  
+                  </v-card-text>                  
                 </v-flex>                
               </v-layout>              
             </v-container>
             <v-card-actions>
               <v-spacer></v-spacer>
+              <v-btn color="primary" @click="$router.push('/userProfile')">회원정보</v-btn>
               <v-btn color="primary" @click="signOut">로그아웃</v-btn>
-              
             </v-card-actions>
           </v-card>
         </v-menu>
-
-        <!-- <v-btn icon @click="signOut">
-          <v-icon>mdi-dots-vertical</v-icon>
-        </v-btn> -->
       </v-toolbar-items>
     </v-app-bar>
 
