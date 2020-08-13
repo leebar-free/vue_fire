@@ -116,11 +116,14 @@ export default {
 
           const u = await this.$firebase.auth().createUserWithEmailAndPassword(this.form.email, this.form.password)
           // console.log(u)
+          this.$toasted.global.notice('가입이 완료되었습니다. 이메일을 확인해 주세요.')
           const user = this.$firebase.auth().currentUser
           const result = await user.updateProfile({
             displayName: `${this.form.lastName} ${this.form.firstName}`
           })
           console.log(result)
+          this.$firebase.auth().languageCode = 'ko'
+          await user.sendEmailVerification()
           await this.$firebase.auth().signOut()
           this.$emit('changeType')
         },

@@ -1,22 +1,18 @@
 <template>
-    <v-card
-        :loading="loading"
-    >
-        <div class="d-flex flex-no-wrap justify-space-between">
-            <v-avatar
-                class="ma-2"
+    <v-card :loading="loading">
+        <v-list-item three-line>
+            <v-list-item-avatar
                 size="125"
                 tile
             >
                 <v-img :src="item.photoURL | imageCheck"></v-img>
-            </v-avatar>
-
-            <div>
-                <v-card-title
-                class="headline mb-2"
-                v-text="item.email"
-                ></v-card-title>
-
+            </v-list-item-avatar>
+            <v-list-item-content class="align-self-start">
+                <v-list-item-title
+                    class="headline mb-2"
+                    v-text="item.email"
+                >
+                </v-list-item-title>
                 <v-card-subtitle >{{ item.displayName | nameCheck }}</v-card-subtitle>
                 <v-card-subtitle>
                     <v-select
@@ -28,9 +24,14 @@
                         hide-details
                         @change="levelChange(item)"
                     ></v-select>
-                </v-card-subtitle>                
-            </div>
-        </div>
+                </v-card-subtitle>
+            </v-list-item-content>
+        </v-list-item>
+        <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn @click="del" color="error">삭제</v-btn>
+            
+        </v-card-actions>
     </v-card>
 </template>
 
@@ -68,6 +69,11 @@ export default {
             .finally(() => {
                 this.loading = false
             })
+        },
+        async del () {
+            console.log("del :", `${this.item.uid}`)
+            await this.$axios.delete(`/admin/user/${this.item.uid}`)
+            this.$emit('del')
         },
     },
 

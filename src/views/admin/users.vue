@@ -110,7 +110,7 @@
                                 </div>
                             </v-card> -->
 
-                            <user-card :item="item"></user-card>
+                            <user-card :item="item" @del="list"></user-card>
 
                         </v-flex>
                     </v-layout>

@@ -74,7 +74,18 @@ app.patch('/user/:uid/level', async (req, res) => {
     const claims = { level: level }
     await admin.auth().setCustomUserClaims(uid, claims)
     await db.collection('users').doc(uid).update(claims)
-    res.send(200).end()
+    res.send(204).end()
+})
+
+app.delete('/user/:uid', async (req, res) => {
+    const uid = req.params.uid
+    console.log("app.delete..uid :", uid)
+
+    if (!uid) return res.send(400).end()
+
+    await admin.auth().deleteUser(uid)
+
+    res.send(204).end()
 })
 
 app.use(require('../middlewares/error'))

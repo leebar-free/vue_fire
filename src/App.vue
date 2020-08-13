@@ -92,7 +92,8 @@
                 :size="32"
                 color="grey lighten-4"
               >
-                <img src="$store.state.user.photoURL" alt="avatar">
+                <img v-if="$store.state.user.photoURL" :src="$store.state.user.photoURL" alt="avatar">
+                <v-icon v-else> mdi-account</v-icon>
               </v-avatar>
             </v-btn>
           </template>
@@ -104,7 +105,8 @@
                     :size="96"
                     color="grey lighten-4"
                   >
-                    <img src="$store.state.user.photoURL" alt="avatar">
+                    <img v-if="$store.state.user.photoURL" :src="$store.state.user.photoURL" alt="avatar">
+                    <v-icon v-else> mdi-account</v-icon>
                     <!-- <img src="https://lh4.googleusercontent.com/-Fx791vz8bTg/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuckwU2Y7e7QUlk0KYUXNbOqZ-bf27Q/photo.jpg" alt="avatar"> -->
                   </v-avatar>
                 </v-flex>
