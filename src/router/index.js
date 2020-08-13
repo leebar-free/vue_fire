@@ -144,6 +144,11 @@ const routes = [
     name: 'grid',
     component: () => import('../views/lectures/grid.vue')
   },
+  {
+    path: '/lectures/rdb',
+    name: 'rdb',
+    component: () => import('../views/lectures/rdb.vue')
+  },
   // {
   //   path: '/test/lv0',
   //   name: 'lv0',

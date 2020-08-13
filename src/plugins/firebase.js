@@ -1,14 +1,15 @@
 // Firebase App (the core Firebase SDK) is always required and must be listed first
 import Vue from 'vue'
-import * as firebase from "firebase/app";
-import firebaseConfig from '../../firebaseConfig';
-import store from '../store';
+import * as firebase from "firebase/app"
+import firebaseConfig from '../../firebaseConfig'
+import store from '../store'
 // import router from '../router'
 
 // Add the Firebase products that you want to use
-import "firebase/auth";
-import "firebase/firestore";
-import "firebase/firebase-storage";
+import "firebase/auth"
+import "firebase/firestore"
+import "firebase/firebase-storage"
+import "firebase/database"
 
 // TODO: Replace the following with your app's Firebase project configuration
 // const firebaseConfig = {
@@ -49,4 +50,4 @@ firebase.auth().onAuthStateChanged(function(user) {
     //     router.push('/sign')
     //   }
     // })
-});
+})

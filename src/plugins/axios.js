@@ -1,8 +1,8 @@
 import Vue from 'vue'
-import axios from "axios";
-import moment from "moment";
-import store from '../store';
-import firebaseConfig from '../../firebaseConfig';
+import axios from "axios"
+import moment from "moment"
+import store from '../store'
+import firebaseConfig from '../../firebaseConfig'
 
 const firebaseAPI = axios.create({
     baseURL: process.env.NODE_ENV === 'production' ? `https://us-central1-${firebaseConfig.projectId}-99d24.cloudfunctions.net/` : `http://localhost:5001/${firebaseConfig.projectId}/us-central1/`,
@@ -29,7 +29,7 @@ firebaseAPI.interceptors.request.use(async (config) => {
     return config
     }, function (error) {
     // Do something with request error
-    return Promise.reject(error);
+    return Promise.reject(error)
 })
 
 // Vue.prototype.$axios = axios

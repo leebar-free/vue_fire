@@ -206,6 +206,11 @@
                 to: '/lectures/axios',
                 icon: 'mdi-alert-box',
               },
+              {
+                title: 'rdb',
+                to: '/lectures/rdb',
+                icon: 'mdi-alert-box',
+              },
             ]
           },
           {
