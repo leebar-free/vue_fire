@@ -116,7 +116,7 @@ export default {
                     }
                 }, () => {
                     // Upload completed successfully, now we can get the download URL
-                    uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                    uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
                         user.updateProfile({
                             photoURL: downloadURL
                         })
